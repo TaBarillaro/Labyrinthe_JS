@@ -10,7 +10,31 @@
 .cell {
     width: 100px;
     height: 100px;
-    background-color: rgb(139, 95, 95);
+    background-color: rgb(243, 234, 234);
     box-sizing: border-box;
-    border: 0.5px solid black;
+    /* border: 0.5px solid black; */
+}
+
+.wall-top {
+    border-top: 1px solid black;
+}
+
+.wall-right {
+    border-right: 1px solid black;
+}
+
+.wall-bottom {
+    border-bottom: 1px solid black;
+}
+
+.wall-left {
+    border-left: 1px solid black;
+}
+
+.start {
+    background-color: rgb(231, 133, 53);
+}
+
+.end {
+    background-color: rgb(88, 148, 88)
 }
