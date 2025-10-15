@@ -62,3 +62,34 @@ document.addEventListener('keydown', (event) => {
         console.log('Félicitations ! Vous avez atteint la fin du labyrinthe.');
     }
 });
+
+// Pseudo code pour labyrinthe dynamique à partir du JSON
+
+// Fonction buildLabyrinthFromJson(json, sizeKey, exampleKey):
+//   je sélectionne le conteneur ".grid"
+//   je vide le contenu existant
+//   - Déterminer la taille du labyrinthe (par ex. sizeKey = "3" = 3x3)
+//   - Définir le nombre de colonnes et lignes dans le style CSS
+//   - Parcourir chaque cellule
+//        Créer une div avec la classe "cell"
+//        Ajouter les classes de murs
+//        Si "entrance" est true
+//          j'ajoute la classe "start" et j'y insére le joueur
+//        Si "exit" est true
+//          j'ajoute la classe "end"
+//   - Ajouter chaque cellule au conteneur ".grid"
+
+// Gérer le déplacement du joueur avec les flèches
+
+//  Ajouter un addEeventListener sur "keydown"
+//  Identifier la cellule actuelle du joueur et sa position (posX, posY)
+//  Calculer la cellule cible selon la flèche pressée
+//  Vérifier que la cellule cible existe
+//  Vérifier les murs:
+//      * Si le mur dans la direction souhaitée est présent
+//          je bloque le mouvement
+//      * Sinon
+//          je déplace le joueur
+//      * Si la nouvelle cellule est la sortie (classe "end"), afficher un message de victoire
+
+
