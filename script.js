@@ -97,3 +97,10 @@ const [_, row, col] = currentCell.id.split('-').map(Number);
     }
 });
 
+// déplacements automatiques du joueur
+
+//pseudo code: ce que je ferais
+// je regarderai dans toutes les directions (up, down, left, right) et je verrai si le mur est absent
+// si le mur est absent et c'est une nouvelle case, je me déplace dans cette direction
+// je répète jusqu'à atteindre la cellule de sortie
+
