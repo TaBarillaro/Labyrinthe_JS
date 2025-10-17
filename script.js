@@ -79,57 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('solveDFS').onclick = () => autoSolveLabyrinth(lab);
 });
 
-// Gérer le déplacement du joueur avec les flèches
-// Ajouter un addEeventListener sur "keydown"
-// document.addEventListener('keydown', (event) => {
-//     console.log(" touche pressée : " + event.key);
-//     const player = document.querySelector('.player');
-//     if (!player) return; 
-//     console.log(player);
-// // Identifier la cellule actuelle du joueur et sa position (posX, posY)
-//     const currentCell = player.parentElement;
-// //  Calculer la cellule cible selon la flèche pressée
-// const [_, row, col] = currentCell.id.split('-').map(Number);
-// // Vérifier que la cellule cible existe
-//     let targetRow = row;
-//     let targetCol = col;
-
-//     switch(event.key) {
-//         case 'ArrowUp':
-//             targetRow--;
-//             break;
-//         case 'ArrowDown':
-//             targetRow++;
-//             break;
-//         case 'ArrowLeft':
-//             targetCol--;
-//             break;
-//         case 'ArrowRight':
-//             targetCol++;
-//             break;
-//         default:
-//             return; // quitter si ce n'est pas une touche fléchée
-//     }
-//     const targetCell = document.getElementById(`cell-${targetRow}-${targetCol}`);
-//     if (!targetCell) {return}; // cellule cible hors de la grille
-
-// // Vérifier les murs:
-// // Si le mur dans la direction souhaitée est présent
-//     if ((event.key === 'ArrowUp' && (currentCell.classList.contains('wall-top') || targetCell.classList.contains('wall-bottom'))) ||
-//         (event.key === 'ArrowDown' && (currentCell.classList.contains('wall-bottom') || targetCell.classList.contains('wall-top'))) ||
-//         (event.key === 'ArrowLeft' && (currentCell.classList.contains('wall-left') || targetCell.classList.contains('wall-right'))) ||
-//         (event.key === 'ArrowRight' && (currentCell.classList.contains('wall-right') || targetCell.classList.contains('wall-left')))) {
-//         // je bloque le mouvement
-//         return; 
-//     }
-// // Sinon je déplace le joueur
-//     targetCell.appendChild(player);
-// // Si la nouvelle cellule est la sortie (classe "end"), afficher un message de victoire
-//     if (targetCell.classList.contains('end')) {
-//         console.log('Félicitations! Vous avez atteint la fin du labyrinthe');
-//     }
-// });
-
 function getNeighbors(lab, cellKey) {
     const neighbors = [];
     const [x, y] = cellKey.split('-').map(Number);
@@ -203,14 +152,13 @@ function autoSolveLabyrinth(lab) {
     path.push(lab.start);
     path.reverse();
     console.log("Chemin trouvé :", path);
-    animatePath(path);
+    animatePath(path, 300);
 }
 
 // Fonction pour animer le déplacement du joueur le long du chemin trouvé
 async function animatePath(path, delay = 300) {
     const player = document.querySelector('.player');
     for (let i = 1; i < path.length; i++) {
-        console.warn("Chemin trop court ou vide");
         const step = path[i];
         const targetCell = document.getElementById(`cell-${step.x}-${step.y}`);
         if (!targetCell) continue;
