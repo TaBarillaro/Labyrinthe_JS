@@ -130,75 +130,91 @@ document.addEventListener('DOMContentLoaded', () => {
 //     }
 // });
 
-// function getNeighbors(lab, cellKey) {
-//     const neighbors = [];
-//     const [x, y] = cellKey.split('-').map(Number);
-//     const directions = [
-//         { dx: -1, dy: 0, wallIndex: 0 }, // up
-//         { dx: 0, dy: 1, wallIndex: 1 },  // right
-//         { dx: 1, dy: 0, wallIndex: 2 },  // down
-//         { dx: 0, dy: -1, wallIndex: 3 }  // left
-//     ];
-//     for (const dir of directions) {
-//         const neighborX = x + dir.dx;
-//         const neighborY = y + dir.dy;
-//         const neighborKey = `${neighborX}-${neighborY}`;
-//         if (!lab.cells[neighborKey]) continue; 
-//         const currentCell = lab.cells[cellKey];
-//         const neighborCell = lab.cells[neighborKey];
-//         if (!currentCell.walls[dir.wallIndex]) {
-//             neighbors.push(neighborKey);
-//         }
-//     }
-//     return neighbors;
-// }
+function getNeighbors(lab, cellKey) {
+    const neighbors = [];
+    const [x, y] = cellKey.split('-').map(Number);
+    const directions = [
+        { dx: -1, dy: 0, wallIndex: 0 }, // up
+        { dx: 0, dy: 1, wallIndex: 1 },  // right
+        { dx: 1, dy: 0, wallIndex: 2 },  // down
+        { dx: 0, dy: -1, wallIndex: 3 }  // left
+    ];
+    for (const dir of directions) {
+        const neighborX = x + dir.dx;
+        const neighborY = y + dir.dy;
+        const neighborKey = `${neighborX}-${neighborY}`;
+        if (!lab.cells[neighborKey]) continue; 
+        const currentCell = lab.cells[cellKey];
+        const neighborCell = lab.cells[neighborKey];
 
-// // DFS version itérative 
-// function autoSolveLabyrinth(lab) {
-//     const startKey = `${lab.start.x}-${lab.start.y}`;
-//     const endKey = `${lab.end.x}-${lab.end.y}`;
-//     const visited = new Set();
-//     const parent = {};
-//     let found = false;
+        if (!neighborCell) continue;
 
-//     const stack = [startKey];
-//     visited.add(startKey);
+        // Vérifie l'absence de murs dans les deux cellules (dans la direction correspondante)
+        const hasWallHere = currentCell.walls[dir.wallIndex];
+        const hasWallThere = neighborCell.walls[(dir.wallIndex + 2) % 4]; // direction opposée
 
-//     while (stack.length > 0) {
-//         const currentKey = stack.pop();
-//         if (currentKey === endKey) {
-//            found = true;
-//            break;
-//         }
+        if (!hasWallHere && !hasWallThere) {
+            neighbors.push(neighborKey);
+        }
+    }
+    return neighbors;
+}
 
-//         // if (!currentCell) continue;
-//     }
-//     if (!found) {
-//         console.log("No path found");
-//         return;
-//     }
+// DFS version itérative 
+function autoSolveLabyrinth(lab) {
+    const startKey = `${lab.start.x}-${lab.start.y}`;
+    const endKey = `${lab.end.x}-${lab.end.y}`;
+    const visited = new Set();
+    const parent = {};
+    let found = false;
+    const stack = [startKey];
+    visited.add(startKey);
 
-//     // Reconstruct path
-//     const path = [];
-//     let current = endKey;
-//     while (current !== startKey) {
-//         const [x, y] = current.split('-').map(Number);
-//         path.push({ x, y });
-//         current = parent[current];
-//     }
-//     path.push(lab.start);
-//     path.reverse();
-//     animatePath(path);
-// }
+    while (stack.length > 0) {
+        const currentKey = stack.pop();
+        if (currentKey === endKey) {
+           found = true;
+           break;
+        }
+        const neighbors = getNeighbors(lab, currentKey);
+        for (const neighborKey of neighbors) {
+            if (visited.has(neighborKey)) {
+                console.log(`Voisin déjà visité ${neighborKey}`);
+                continue;
+            }
+            visited.add(neighborKey);
+            parent[neighborKey] = currentKey;
+            stack.push(neighborKey);
+            console.log(`On pousse ${currentKey} depuis ${neighborKey}`);
+        }
+    }
+    if (!found) {
+        console.log("No path found");
+        return;
+    }
+    // Reconstruct path
+    const path = [];
+    let current = endKey;
+    while (current !== startKey) {
+        const [x, y] = current.split('-').map(Number);
+        path.push({ x, y });
+        current = parent[current];
+    }
+    path.push(lab.start);
+    path.reverse();
+    console.log("Chemin trouvé :", path);
+    animatePath(path);
+}
 
-// // Fonction pour animer le déplacement du joueur le long du chemin trouvé
-// async function animatePath(path, delay = 300) {
-//     const player = document.querySelector('.player');
-//     for (let i = 1; i < path.length; i++) {
-//         const step = path[i];
-//         const targetCell = document.getElementById(`cell-${step.x}-${step.y}`);
-//         if (!targetCell) continue;
-//         await new Promise(resolve => setTimeout(resolve, delay));
-//         targetCell.appendChild(player);
-//     }
-// }
+// Fonction pour animer le déplacement du joueur le long du chemin trouvé
+async function animatePath(path, delay = 300) {
+    const player = document.querySelector('.player');
+    for (let i = 1; i < path.length; i++) {
+        console.warn("Chemin trop court ou vide");
+        const step = path[i];
+        const targetCell = document.getElementById(`cell-${step.x}-${step.y}`);
+        if (!targetCell) continue;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        targetCell.appendChild(player);
+    }
+}
